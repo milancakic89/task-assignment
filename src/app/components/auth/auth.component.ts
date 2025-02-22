@@ -23,6 +23,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -45,6 +46,7 @@ export class AuthComponent {
   fb = inject(FormBuilder);
   authService = inject(AuthService);
   messageService = inject(MessageService);
+  router = inject(Router);
 
   signinForm = this.fb.group({
     email: new FormControl('', {
@@ -78,9 +80,10 @@ export class AuthComponent {
       .subscribe(user => {
         this.submitting.set(false)
         if(user){
+          this.router.navigateByUrl('home')
           this.messageService.add({severity: 'success', summary: "Login Success",  detail: `Welcome ${user.name}`, life: 3000,});
         }else{
-          this.messageService.add({severity: 'danger', summary: "Login failed",  detail: `User not found`, life: 3000});
+          this.messageService.add({severity: 'error', summary: "Login failed",  detail: `User not found`, life: 3000});
         }
       });
   }

@@ -9,12 +9,13 @@ import { ToastModule } from 'primeng/toast';
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [ToastModule, NavigationComponent, RouterModule, ButtonModule],
+    imports: [ToastModule, NavigationComponent,RouterModule, ButtonModule],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
 export class AppComponent {
   authService = inject(AuthService);
 
-  user = toSignal(this.authService.user$)
+  user = toSignal(this.authService.user$);
+
  }
