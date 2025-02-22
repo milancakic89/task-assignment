@@ -1,0 +1,7 @@
+get query example /categories?price=100&discount.type=shipping&_sort=price&_order=desc
+
+
+
+pagination /categories?_page=1&_limit=15 (10 is default)
+
+pretraga not equal za email recimo  /users?email_ne={value}

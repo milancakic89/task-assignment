@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "testuser",
+      "email": "test@test.com",
+      "password": "test12345"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "createdBy": 1,
+      "amount": 10,
+      "createdDate": "22/02/2025"
+    }
+  ]
+}
