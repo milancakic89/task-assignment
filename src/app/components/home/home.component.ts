@@ -1,12 +1,43 @@
 import { Component } from '@angular/core';
+import { inject } from '@angular/core';
+import { AuthService } from '../../services/auth/model/auth.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { map } from "rxjs/operators";
+import { HomeApiService } from '../../services/home/home-api.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [],
+    imports: [ButtonModule, DialogModule, InputNumberModule, ReactiveFormsModule],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+  authService = inject(AuthService);
+  fb = inject(FormBuilder);
+  homeApiService = inject(HomeApiService);
+  messageService = inject(MessageService);
 
+  showDialog = false;
+
+  user = toSignal(this.authService.user$);
+  currentAmount = toSignal(this.authService.user$.pipe(map(user => user?.accountAmount || 0))) ;
+
+  form = this.fb.group({
+    accountAmount: new FormControl(this.currentAmount(), [Validators.required])
+  });
+
+  onSubmit(): void {
+    this.homeApiService.changeAmount(this.form.value.accountAmount as number).subscribe(
+      _ => {
+        this.showDialog = false;
+         this.messageService.add({ severity: 'success', summary: 'Success', detail: `Amount updated`, life: 2000});
+      }
+    )
+  }
 }

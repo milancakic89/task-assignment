@@ -19,16 +19,23 @@ import { LoginInfo, User } from '../../services/auth/model/types';
 import { AuthService } from '../../services/auth/model/auth.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { passwordValidator } from '../../shared/validators/password.validator';
+import { Popover } from 'primeng/popover';
+import { CommonModule } from '@angular/common';
+import { map, tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-auth',
   standalone: true,
   imports: [
+    CommonModule ,
     ButtonModule,
     DialogModule,
     CardModule,
     InputTextModule,
     ReactiveFormsModule,
+    Popover
+
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
@@ -44,23 +51,23 @@ export class AuthComponent {
   router = inject(Router);
 
   signinForm = this.fb.group({
-    email: new FormControl('', {
+    email: new FormControl('test@test.com', {
       validators: [Validators.email, Validators.required],
       updateOn: 'blur',
     }),
-    password: new FormControl('', [Validators.required])
+    password: new FormControl('test12345', [Validators.required])
   });
 
   signupForm = this.fb.group({
     nameAndSurname: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
     email: new FormControl('', {
-      validators: [Validators.required],
+      validators: [Validators.required, Validators.email],
       asyncValidators: [userExistValidator()],
       updateOn: 'blur',
     }),
-    password: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    password: new FormControl('', [Validators.required, passwordValidator()]),
     accountAmount: new FormControl(0, [Validators.required, Validators.pattern(/^[0-9]+$/)]),
-  })
+  });
 
   onSignIn() {
     this.submitting.set(true);
@@ -69,9 +76,6 @@ export class AuthComponent {
       this.submitting.set(false);
       if (user) {
         this.router.navigateByUrl('home');
-        this.messageService.add({ severity: 'success', summary: 'Login Success',detail: `Welcome ${user.nameAndSurname}`,
-          life: 2000,
-        });
       } else {
         this.messageService.add({severity: 'error', summary: 'Login failed', detail: `User not found`, life: 2000});
       }

@@ -5,7 +5,7 @@
       "nameAndSurname": "testuser",
       "email": "test@test.com",
       "password": "test12345",
-      "accountAmount": 2
+      "accountAmount": 1000
     },
     {
       "id": "8409",
@@ -62,14 +62,37 @@
       "email": "milancakic892@gmail.com",
       "password": "test",
       "accountAmount": 2
+    },
+    {
+      "id": "a20d",
+      "nameAndSurname": "milan cakic",
+      "email": "milancakic897@gmail.com",
+      "password": "Masterdamus12#",
+      "accountAmount": 2
+    },
+    {
+      "id": "e92e",
+      "nameAndSurname": "milan cakic",
+      "email": "guruguru.com",
+      "password": "#Masterdamus21",
+      "accountAmount": 2
+    },
+    {
+      "id": "4bb7",
+      "nameAndSurname": "milan cakic",
+      "email": "test",
+      "password": "#Masterdamus12",
+      "accountAmount": 3
     }
   ],
   "transactions": [
     {
-      "id": "1",
-      "createdBy": 1,
-      "amount": 10,
-      "createdDate": "22/02/2025"
+      "id": "6bf7",
+      "purchasedItem": "item",
+      "category": "dasd",
+      "timeAndDate": "2025-02-04T23:00:00.000Z",
+      "amountSpent": 20,
+      "userId": "1"
     }
   ]
 }

@@ -9,7 +9,7 @@ export const authenticatedGuard: CanActivateFn = (): Observable<boolean> => {
   const router = inject(Router)
   return authService.user$.pipe(
     map(user => {
-      if(user){
+      if(user.id){
         return true;
       }
 

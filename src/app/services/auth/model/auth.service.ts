@@ -5,9 +5,17 @@ import { User } from './types';
 import { tap, filter, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+export const ANONYMOUS_USER: User = {
+  id: '',
+  nameAndSurname: '',
+  email: '',
+  password: '',
+  accountAmount: 0
+}
+
 @Injectable({ providedIn: 'root'})
 export class AuthService {
-  private _user$ = new BehaviorSubject<User | null>(null);
+  private _user$ = new BehaviorSubject<User>(ANONYMOUS_USER);
 
   authApiService = inject(AuthApiService);
   router = inject(Router)
@@ -15,7 +23,6 @@ export class AuthService {
   user$ = this._user$.asObservable();
 
   isAdmin$ = this.user$.pipe(
-    filter(Boolean),
     map(user => user.email === "test@test.com" && user.password === "test12345")
   )
 
@@ -23,7 +30,7 @@ export class AuthService {
     return this.authApiService.signIn(email, password).pipe(
       tap(user => {
         if(user){
-          this._user$.next(user);
+          this.updateUser(user);
         }
       })
     )
@@ -33,8 +40,12 @@ export class AuthService {
     return this.authApiService.signUp(user)
   }
 
+  updateUser(user: User): void {
+    this._user$.next(user);
+  }
+
   logout(): void {
-    this._user$.next(null);
+    this._user$.next(ANONYMOUS_USER);
     this.router.navigateByUrl('auth');
   }
 }

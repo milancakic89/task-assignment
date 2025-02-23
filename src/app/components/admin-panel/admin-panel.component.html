@@ -1,1 +1,30 @@
-<p>admin-panel works!</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name and surname</th>
+      <th>Email</th>
+      <th>View & Delete button</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(user of users; track user){
+      <tr>
+        <td>{{ user.nameAndSurname }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <span class="actions">
+            <p-button label="Edit" (click)="onViewUserTransactions(user)"/>
+            <p-button label="Delete" severity="danger" (click)="onDeleteUser(user)"/>
+          </span>
+        </td>
+      </tr>
+    }
+  </tbody>
+
+
+</table>
+
+<p-dialog header="Edit user" class="transactions" [modal]="true" [(visible)]="showDialog" position="top">
+  <app-transactions></app-transactions>
+</p-dialog>

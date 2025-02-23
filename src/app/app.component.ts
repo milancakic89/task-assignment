@@ -5,6 +5,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { AuthService } from './services/auth/model/auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ToastModule } from 'primeng/toast';
+import { filter } from "rxjs/operators";
 
 @Component({
     selector: 'app-root',
@@ -16,6 +17,6 @@ import { ToastModule } from 'primeng/toast';
 export class AppComponent {
   authService = inject(AuthService);
 
-  user = toSignal(this.authService.user$);
+  userSignal = toSignal(this.authService.user$.pipe(filter(user => user.id !== '')));
 
  }

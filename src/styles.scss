@@ -1,5 +1,7 @@
+// @import "primeicons/primeicons.css";
+
 :root {
-  --nav-bg-color: rgb(6, 181, 181);
+  --header-bg-color: rgb(6, 181, 181);
   --link-color: rgb(90, 90, 90);
   --link-color-hover: rgb(92, 92, 92);
 }
@@ -17,57 +19,63 @@ html,
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
   background-color: #eee;
 }
 
-nav {
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.6rem 1rem;
-  background-color: var(--nav-bg-color);
+  background-color: var(--header-bg-color);
 
-  .logo{
+  .logo {
     font-weight: 600;
     font-size: 1.3rem;
     margin: 0;
   }
 
-  ul {
-    list-style-type: none;
-    margin: 0;
+  nav {
+    display: flex;
+    align-items: center;
 
-    li {
-      display: inline-flex;
-      padding: 0 0.2rem;
-      justify-content: center;
+    ul {
+      list-style-type: none;
+      margin: 0;
 
-      a {
-        text-decoration: none;
-        color: var(--link-color);
-        font-weight: 500;
+      li {
+        display: inline-flex;
+        padding: 0 0.2rem;
+        justify-content: center;
 
-        &.active {
-          color: rgb(94, 77, 0);
-          font-weight: 600;
+        a {
+          text-decoration: none;
+          color: var(--link-color);
+          font-weight: 500;
+
+          &.active {
+            color: rgb(94, 77, 0);
+            font-weight: 600;
+          }
+
+          &:not(.active):hover {
+            cursor: pointer;
+            color: var(--link-color-hover);
+          }
         }
 
-        &:not(.active):hover {
-          cursor: pointer;
-          color: var(--link-color-hover);
+        &:not(:first-child) {
+          margin-left: 1rem;
         }
-      }
-
-      &:not(:first-child) {
-        margin-left: 1rem;
       }
     }
   }
 }
 
 .form {
-  width: 100%;
-  width: 20rem;
+  min-width: 20rem;
+  max-width: 30rem;
 
   .field {
     position: relative;
@@ -109,9 +117,74 @@ nav {
   }
 }
 
+p-dialog {
+  &.transactions {
+    .transactions__form {
+      height: 32rem;
+      display: flex;
+      flex-direction: column;
+
+      .footer {
+        margin-top: auto;
+      }
+    }
+  }
+
+  .p-datepicker {
+    width: 100%;
+  }
+}
+
 app-auth {
   height: 100vh;
   display: flex;
   place-content: center;
   flex-wrap: wrap;
+}
+
+app-home,
+app-transactions {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+table {
+  width: 95%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  margin: 2rem auto;
+
+  thead{
+    background-color: var(--header-bg-color);
+  }
+
+  .actions {
+    display: inline-flex;
+    justify-content: flex-end;
+  }
+
+  th,
+  td {
+    border: 1px solid gray;
+  }
+
+  th{
+    padding: 0.5rem;
+    background-color: var();
+  }
+
+  td{
+    padding: 0.2rem 0.6rem;
+
+    :last-child{
+
+      margin-left: 0.6rem;
+    }
+
+    &:last-child{
+      width: 15%;
+      text-align: right;
+    }
+  }
 }

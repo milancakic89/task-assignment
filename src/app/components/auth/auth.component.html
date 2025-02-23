@@ -33,7 +33,7 @@
 
 
 <p-dialog header="Signup" [modal]="true" [(visible)]="showSignUpModal" position="top" >
-    <form class="form form__signup" [formGroup]="signupForm" (ngSubmit)="onSignUp()">
+    <form class="form form__signup" [formGroup]="signupForm" (ngSubmit)="onSignUp()"(ngSubmit)="onSignUp()">
         <div class="field">
             <label for="nameAndSurname">Name and Surname</label>
             <input id="nameAndSurname" name="nameAndSurname" type="text" pInputText formControlName="nameAndSurname" placeholder="Name and Surname" class="w-full p-2" />
@@ -55,19 +55,15 @@
                   <small>email is required</small>
                   }
                   @if(signupForm.controls.email.errors?.['email']) {
-                  <small>email not valid</small>
+                  <small>invalid email</small>
                   }
               }
         </div>
         <div class="field">
           <label for="password">Password</label>
           <input id="password" name="password" type="password" pInputText formControlName="password"
-              placeholder="Enter your password" class="w-full p-2" />
-
-          @if (signupForm.controls.password.invalid && signupForm.controls.password.dirty){
-             <small>password must be minimum 3 characters long</small>
-          }
-      </div>
+              placeholder="Enter your password" (focus)="op.toggle($event)" class="w-full p-2" />
+        </div>
       <div class="field">
         <label for="accountAmount">Account Amount</label>
         <input id="accountAmount" name="accountAmount" type="number" pInputText formControlName="accountAmount"
@@ -84,3 +80,20 @@
         </div>
     </form>
 </p-dialog>
+
+<p-popover #op>
+  <div class="password__validation">
+    <small [ngClass]="{'valid': !!signupForm.controls.password.errors?.['minLength'] || signupForm.controls.password.valid}">
+      Minimum 5 characters
+    </small>
+    <small [ngClass]="{'valid': !!signupForm.controls.password.errors?.['hasUppercase'] || signupForm.controls.password.valid}">
+      Minimum 1 uppercase character
+    </small>
+    <small [ngClass]="{'valid': !!signupForm.controls.password.errors?.['hasNumber'] || signupForm.controls.password.valid}">
+      Minimum 1 numberic character
+    </small>
+    <small [ngClass]="{'valid': !!signupForm.controls.password.errors?.['hasSpecialChar'] || signupForm.controls.password.valid}">
+      Minimum 1 special character
+    </small>
+  </div>
+</p-popover>

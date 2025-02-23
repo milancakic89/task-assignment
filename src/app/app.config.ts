@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, InjectionToken, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
@@ -8,6 +8,8 @@ import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+export const API_URL = new InjectionToken<string>('API_URL')
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +26,10 @@ export const appConfig: ApplicationConfig = {
             }
         }),
     MessageService,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    {
+      provide: API_URL,
+      useValue: 'http://localhost:3000'
+    }
   ]
 };

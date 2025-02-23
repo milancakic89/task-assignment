@@ -1,1 +1,16 @@
-<p>home works!</p>
+<h3>Welcome {{ user()?.nameAndSurname }} your current balance is {{ user()?.accountAmount }}</h3>
+
+<p-button label="Change amount" (click)="showDialog = true" />
+
+<p-dialog header="Change amount" [modal]="true" [(visible)]="showDialog" position="top">
+  <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label for="amount">Amount</label>
+        <p-inputnumber id="amount" type="number" name="amount" formControlName="accountAmount" placeholder="Amount" p class="w-full p-2"/>
+      </div>
+      <div class="footer">
+        <p-button label="Save" type="submit" [disabled]="form.invalid"/>
+        <p-button label="Cancel" severity="secondary" type="button" (click)="showDialog = false"/>
+      </div>
+  </form>
+</p-dialog>

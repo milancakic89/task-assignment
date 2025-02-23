@@ -1,0 +1,27 @@
+<form class="form transactions__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="field">
+    <label for="purchasedItem">Purchased item</label>
+    <input id="purchasedItem" type="text" name="purchasedItem" pInputText formControlName="purchasedItem" placeholder="Purchased item" p class="w-full p-2"/>
+  </div>
+  <div class="field">
+    <label for="category">Category</label>
+    <input id="category" type="text" name="category" pInputText formControlName="category" placeholder="category" p class="w-full p-2"/>
+  </div>
+  <div class="field">
+    <label for="timeAndDate">Time and Date</label>
+    <p-datepicker  id="timeAndDate"  name="timeAndDate" formControlName="timeAndDate" placeholder="Time and Date" p class="w-full p-2 datepicker" />
+  </div>
+  <div class="field">
+    <label for="amountSpent">Amount spent</label>
+    <p-inputnumber id="amountSpent" type="text" name="amountSpent" formControlName="amountSpent" placeholder="Amount spent" p class="w-full p-2"/>
+    @if (form.controls.amountSpent.invalid && form.controls.amountSpent.dirty){
+      @if(form.controls.amountSpent.errors?.['amount']) {
+      <small>exceeding account balance</small>
+      }
+  }
+  </div>
+  <div class="footer">
+    <p-button label="Save transaction" type="submit" [disabled]="form.invalid"/>
+    <p-button label="Cancel" severity="secondary" type="button" (click)="onCloseDialog()"/>
+  </div>
+</form>

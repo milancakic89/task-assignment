@@ -1,1 +1,20 @@
-<p>transactions works!</p>
+<p-button label="Add transaction" (click)="showDialog = true" />
+<p-dialog
+  header="Add transaction"
+  class="transactions"
+  [modal]="true"
+  [(visible)]="showDialog"
+  position="top"
+>
+  <app-add-transaction
+    (transactionSubmitted)="onAddTransaction($event)"
+  ></app-add-transaction>
+</p-dialog>
+
+@if(transactions$ | async; as transactions ){ @if(transactions.length){
+<app-transaction-table
+  [transactions]="transactions"
+  (deleteTransaction)="deleteTransaction($event)"
+  (updateTransaction)="updateTransaction($event)"
+></app-transaction-table>
+} }

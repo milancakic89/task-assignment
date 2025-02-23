@@ -1,0 +1,11 @@
+.password__validation{
+  display: flex;
+  flex-direction: column;
+
+  small{
+    color: red;
+    &.valid{
+      color: green;
+    }
+  }
+}
