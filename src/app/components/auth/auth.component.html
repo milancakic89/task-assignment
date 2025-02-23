@@ -1,5 +1,5 @@
 <p-card header="Sign in" class="signin">
-    <form class="form signin__form" [formGroup]="signinForm" (ngSubmit)="onLogin()">
+    <form class="form signin__form" [formGroup]="signinForm" (ngSubmit)="onSignIn()">
         <div class="field">
             <label for="email">Email</label>
             <input id="email" name="email" type="email" pInputText formControlName="email"
@@ -7,10 +7,10 @@
 
             @if (signinForm.controls.email.invalid && signinForm.controls.email.dirty){
                 @if(signinForm.controls.email.errors?.['required']) {
-                <small>Email is required</small>
+                <small>email is required</small>
                 }
                 @if(signinForm.controls.email.errors?.['email']) {
-                <small>Email not valid</small>
+                <small>email not valid</small>
                 }
             }
 
@@ -21,45 +21,66 @@
                 placeholder="Enter your password" class="w-full p-2" />
 
             @if (signinForm.controls.password.invalid && signinForm.controls.password.dirty){
-               <small>Password must be minimum 3 characters long</small>
+               <small>password is required</small>
             }
         </div>
         <div class="footer flex flex-column w-full text-center">
             <p-button class="mb-2 w-full" label="Sign in" type="submit" [disabled]="signinForm.invalid || submitting()" />
-            <p-button class="mb-2 w-full" label="Sign up" type="button" severity="secondary" (click)="visible = true" />
+            <p-button class="mb-2 w-full" label="Sign up" type="button" severity="secondary" (click)="showSignUpModal = true" />
         </div>
     </form>
 </p-card>
 
-<p-dialog header="Signup" [modal]="true" [(visible)]="visible" position="top">
-    <form class="form form__signup" [formGroup]="signupForm">
+
+<p-dialog header="Signup" [modal]="true" [(visible)]="showSignUpModal" position="top" >
+    <form class="form form__signup" [formGroup]="signupForm" (ngSubmit)="onSignUp()">
         <div class="field">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" pInputText formControlName="email" placeholder="Enter your email" class="w-full p-2" />
-            @if (signupForm.controls.email.invalid && signupForm.controls.email.dirty){
-                @if(signupForm.controls.email.errors?.['userExists']) {
-                <small>User allready exists</small>
-                }
-                @if(signupForm.controls.email.errors?.['required']) {
-                <small>Email is required</small>
-                }
-                @if(signupForm.controls.email.errors?.['email']) {
-                <small>Email not valid</small>
+            <label for="nameAndSurname">Name and Surname</label>
+            <input id="nameAndSurname" name="nameAndSurname" type="text" pInputText formControlName="nameAndSurname" placeholder="Name and Surname" class="w-full p-2" />
+            @if (signupForm.controls.nameAndSurname.invalid && signupForm.controls.nameAndSurname.dirty){
+                @if(signupForm.controls.nameAndSurname.errors?.['pattern']) {
+                <small>letters only</small>
                 }
             }
         </div>
         <div class="field">
-            <label for="password">Email</label>
-            <input id="password" name="password" type="password" pInputText formControlName="password"  placeholder="Enter your password"
+            <label for="signup-email">Email</label>
+            <input id="signup-email" name="signup-email" type="email" pInputText formControlName="email"  placeholder="Enter your email"
                 class="w-full p-2" />
-                @if (signupForm.controls.password.invalid && signupForm.controls.password.dirty){
-                    <small>Password must be minimum 3 characters long</small>
+                @if (signupForm.controls.email.invalid && signupForm.controls.email.dirty){
+                  @if(signupForm.controls.email.errors?.['userExists']) {
+                    <small>user allready exists</small>
                     }
+                  @if(signupForm.controls.email.errors?.['required']) {
+                  <small>email is required</small>
+                  }
+                  @if(signupForm.controls.email.errors?.['email']) {
+                  <small>email not valid</small>
+                  }
+              }
         </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" pInputText formControlName="password"
+              placeholder="Enter your password" class="w-full p-2" />
+
+          @if (signupForm.controls.password.invalid && signupForm.controls.password.dirty){
+             <small>password must be minimum 3 characters long</small>
+          }
+      </div>
+      <div class="field">
+        <label for="accountAmount">Account Amount</label>
+        <input id="accountAmount" name="accountAmount" type="number" pInputText formControlName="accountAmount"
+            placeholder="Enter amount" class="w-full p-2" />
+
+        @if (signupForm.controls.accountAmount.invalid && signupForm.controls.accountAmount.dirty){
+           <small>provide a valid number</small>
+        }
+    </div>
         <div class="footer flex flex-column w-full text-center">
-            <p-button class="mb-2 w-full" label="Sign in"  [disabled]="signupForm.invalid" />
-            <p-button class="mb-2 w-full" label="Sign in" type="p-button" severity="secondary"
-                (click)="visible = false" />
+            <p-button class="mb-2 w-full" label="Sign up" type="submit" [disabled]="signupForm.invalid || submitting()" />
+            <p-button class="mb-2 w-full" label="Cancel" type="button" severity="secondary"
+                (click)="showSignUpModal = false" />
         </div>
     </form>
 </p-dialog>

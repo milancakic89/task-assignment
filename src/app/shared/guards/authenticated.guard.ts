@@ -12,7 +12,8 @@ export const authenticatedGuard: CanActivateFn = (): Observable<boolean> => {
       if(user){
         return true;
       }
-      router.navigateByUrl('');
+
+      router.navigateByUrl('auth');
       return false;
     }))
 };

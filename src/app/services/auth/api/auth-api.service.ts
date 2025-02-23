@@ -22,4 +22,13 @@ export class AuthApiService {
            map(res => res?.length ? res[0] : null)
         );
     }
+
+    signUp(user: User): Observable<User | null> {
+      return this.http.post<User>(`${this.baseUrl}/users`, user).pipe(
+         catchError(err => {
+          this.messageService.add({severity: 'danger',  detail: err.error, life: 3000});
+          return of(null);
+         }),
+      );
+  }
 }

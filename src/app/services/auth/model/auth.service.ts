@@ -3,12 +3,14 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { User } from './types';
 import { tap, filter, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root'})
 export class AuthService {
-  private _user$ = new BehaviorSubject<User>(null as unknown as User);
+  private _user$ = new BehaviorSubject<User | null>(null);
 
   authApiService = inject(AuthApiService);
+  router = inject(Router)
 
   user$ = this._user$.asObservable();
 
@@ -17,7 +19,7 @@ export class AuthService {
     map(user => user.email === "test@test.com" && user.password === "test12345")
   )
 
-  logIn(email: string, password: string): Observable<User | null> {
+  signIn(email: string, password: string): Observable<User | null> {
     return this.authApiService.signIn(email, password).pipe(
       tap(user => {
         if(user){
@@ -25,5 +27,14 @@ export class AuthService {
         }
       })
     )
+  }
+
+  signUp(user: User): Observable<User | null> {
+    return this.authApiService.signUp(user)
+  }
+
+  logout(): void {
+    this._user$.next(null);
+    this.router.navigateByUrl('auth');
   }
 }

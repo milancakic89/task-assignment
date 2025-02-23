@@ -2,15 +2,66 @@
   "users": [
     {
       "id": "1",
-      "name": "testuser",
+      "nameAndSurname": "testuser",
       "email": "test@test.com",
-      "password": "test12345"
+      "password": "test12345",
+      "accountAmount": 2
     },
     {
-      "id": "1",
-      "name": "testuser",
-      "email": "test2@test.com",
-      "password": "test12345"
+      "id": "8409",
+      "nameAndSurname": "milan cakic",
+      "email": "milancakic89@gmail.com",
+      "password": "dasddas",
+      "accountAmount": 2
+    },
+    {
+      "id": "7082",
+      "nameAndSurname": "milan cakic",
+      "email": "milancakic89@gmail.com",
+      "password": "dasddas",
+      "accountAmount": 2
+    },
+    {
+      "id": "0f49",
+      "nameAndSurname": "milan cakic",
+      "email": "milancakic89@gmail.com",
+      "password": "dasddas",
+      "accountAmount": 2
+    },
+    {
+      "id": "c5a6",
+      "nameAndSurname": "milan cakic",
+      "email": "milancakic84@gmail.com",
+      "password": "asdasda",
+      "accountAmount": 3
+    },
+    {
+      "id": "6deb",
+      "nameAndSurname": "milan cakic",
+      "email": "milancakic84@gmail.com",
+      "password": "asdasda",
+      "accountAmount": 3
+    },
+    {
+      "id": "8a22",
+      "nameAndSurname": "milan cakic",
+      "email": "milancakic894@gmail.com",
+      "password": "dasdasd",
+      "accountAmount": 2
+    },
+    {
+      "id": "d5e5",
+      "nameAndSurname": "milan cakic",
+      "email": "milancakic891@gmail.com",
+      "password": "test",
+      "accountAmount": 4
+    },
+    {
+      "id": "956e",
+      "nameAndSurname": "Milan Cakic",
+      "email": "milancakic892@gmail.com",
+      "password": "test",
+      "accountAmount": 2
     }
   ],
   "transactions": [

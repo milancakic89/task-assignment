@@ -1,9 +1,11 @@
 export interface User {
-    id: number,
-    name: string,
+    id?: number,
+    nameAndSurname: string,
     email: string;
     password: string;
+    accountAmount: number;
 }
+
 
 export interface LoginInfo {
     email: string;

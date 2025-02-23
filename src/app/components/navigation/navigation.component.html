@@ -1,5 +1,23 @@
-@if(isAdmin()){
+<!-- @if(isAdmin()){
   <h1>Welcome admin</h1>
-}
+} -->
+<nav>
+  <p class="logo">Logo</p>
+  <ul>
+    <li>
+      <a routerLink="home" routerLinkActive="active">My account</a>
+    </li>
+    <li>
+      <a routerLink="transactions" routerLinkActive="active">Transactions</a>
+    </li>
+    @if(isAdmin()){
+      <li>
+        <a routerLink="admin-panel" routerLinkActive="active">Admin panel</a>
+      </li>
+    }
 
-<p>navigation works!</p>
+    <li>
+      <p-button label="Sign out" severity="danger" (click)="signout()"/>
+    </li>
+  </ul>
+</nav>

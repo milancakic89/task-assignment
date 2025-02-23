@@ -1,65 +1,117 @@
+:root {
+  --nav-bg-color: rgb(6, 181, 181);
+  --link-color: rgb(90, 90, 90);
+  --link-color-hover: rgb(92, 92, 92);
+}
+
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
-    font-size: 100%;
-    font-family: Arial, Helvetica, sans-serif;
+  font-size: 100%;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 html,
 body {
+  margin: 0;
+  padding: 0;
+  background-color: #eee;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  background-color: var(--nav-bg-color);
+
+  .logo{
+    font-weight: 600;
+    font-size: 1.3rem;
     margin: 0;
-    padding: 0;
-    background-color: #eee;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+
+    li {
+      display: inline-flex;
+      padding: 0 0.2rem;
+      justify-content: center;
+
+      a {
+        text-decoration: none;
+        color: var(--link-color);
+        font-weight: 500;
+
+        &.active {
+          color: rgb(94, 77, 0);
+          font-weight: 600;
+        }
+
+        &:not(.active):hover {
+          cursor: pointer;
+          color: var(--link-color-hover);
+        }
+      }
+
+      &:not(:first-child) {
+        margin-left: 1rem;
+      }
+    }
+  }
 }
 
 .form {
-    width: 100%;
-    width: 20rem;
+  width: 100%;
+  width: 20rem;
 
-    .field {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        padding-bottom: 1.5rem;
+  .field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1.4rem;
 
-        label{
-            margin-bottom: .3rem;
-        }
-
-        input[type=text],
-        input[type=email],
-        input[type=password]  {
-            height: 2rem;
-        }
-
-        small{
-            position: absolute;
-            bottom: 0.3rem;
-            left: 0.1rem;
-            color: var(--p-inputtext-invalid-placeholder-color);
-        }
+    label {
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
     }
 
-    .footer {
-        display: flex;
-        flex-direction: column;
-
-        p-button,
-        button {
-            width: 100%;
-
-            &:not(:last-child) {
-                margin-bottom: .5rem;
-            }
-        }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      height: 2rem;
     }
+
+    small {
+      position: absolute;
+      bottom: 0.3rem;
+      left: 0.1rem;
+      color: var(--p-inputtext-invalid-placeholder-color);
+    }
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+
+    p-button,
+    button {
+      width: 100%;
+
+      &:not(:last-child) {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
 }
 
-app-auth{
-    height: 100vh;
-    display: flex;
-    place-content: center;
-    flex-wrap: wrap;
+app-auth {
+  height: 100vh;
+  display: flex;
+  place-content: center;
+  flex-wrap: wrap;
 }
