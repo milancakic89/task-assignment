@@ -1,31 +1,32 @@
 import { MessageService } from 'primeng/api';
 import { TransactionsApiService } from './../../services/transactions/transactions.service';
-import { Component, Input, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit, inject, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Transaction } from '../../shared/interfaces/transctions';
-import { AuthService } from '../../services/auth/model/auth.service';
 import { combineLatest, BehaviorSubject } from "rxjs";
 import { map, switchMap, filter, tap } from "rxjs/operators";
 import { TransactionTableComponent } from "./transaction-table/transaction-table.component";
 import { CommonModule } from '@angular/common';
 import { AddTransactionComponent } from "./add-transaction/add-transaction.component";
+import { AuthApiService } from '../../services/auth/auth-api.service';
 
 @Component({
     selector: 'app-transactions',
     standalone: true,
-    imports: [CommonModule, ButtonModule, DialogModule, TransactionTableComponent, AddTransactionComponent],
+    imports: [CommonModule, ButtonModule, DialogModule, AddTransactionComponent, TransactionTableComponent],
     templateUrl: './transactions.component.html',
-    styleUrl: './transactions.component.scss'
+    styleUrl: './transactions.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TransactionsComponent implements OnInit {
+export class TransactionsComponent implements OnInit, OnDestroy {
   private _newTransaction$ = new BehaviorSubject<Transaction>(null as  unknown as Transaction);
   private _allTransactions$ = new BehaviorSubject<Transaction[]>([]);
 
   @Input() id = '';
+  @Output() destroyed = new EventEmitter<void>();
 
-  authService = inject(AuthService);
+  authService = inject(AuthApiService);
   transactionApiService = inject(TransactionsApiService);
   messageService = inject(MessageService)
 
@@ -123,6 +124,10 @@ export class TransactionsComponent implements OnInit {
     this._allTransactions$.next(transactions);
     this.lockTransactions = false;
     return transactions;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed.emit();
   }
 
 }

@@ -33,7 +33,7 @@
 
 
 <p-dialog header="Signup" [modal]="true" [(visible)]="showSignUpModal" position="top" >
-    <form class="form form__signup" [formGroup]="signupForm" (ngSubmit)="onSignUp()"(ngSubmit)="onSignUp()">
+    <form class="form form__signup" [formGroup]="signupForm" (ngSubmit)="onSignUp()">
         <div class="field">
             <label for="nameAndSurname">Name and Surname</label>
             <input id="nameAndSurname" name="nameAndSurname" type="text" pInputText formControlName="nameAndSurname" placeholder="Name and Surname" class="w-full p-2" />

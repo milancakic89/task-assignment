@@ -1,34 +1,37 @@
-<table>
-  <thead>
-    <tr>
-      <th>Date of purchase</th>
-      <th>Item purchased</th>
-      <th>Item category</th>
-      <th>Amount spent</th>
-      <th>Edit & Delete button</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for(transaction of transactions; track transaction){
+<div class="table">
+  <table>
+    <thead>
       <tr>
-        <td>{{ transaction.timeAndDate | date }}</td>
-        <td>{{ transaction.purchasedItem }}</td>
-        <td>{{ transaction.category }}</td>
-        <td>{{ transaction.amountSpent }}</td>
-        <td>
-          <span class="actions">
-            <p-button label="Edit" (click)="onEditTransaction(transaction)"/>
-            <p-button label="Delete" severity="danger" (click)="onDeleteTransaction(transaction)"/>
-          </span>
-        </td>
+        <th>Date of purchase</th>
+        <th>Item purchased</th>
+        <th>Item category</th>
+        <th>Amount spent</th>
+        <th>Edit & Delete button</th>
       </tr>
-    }
-  </tbody>
+    </thead>
+    <tbody>
+      @for(transaction of transactions; track transaction.id){
+        <tr>
+          <td>{{ transaction.timeAndDate | date }}</td>
+          <td>{{ transaction.purchasedItem }}</td>
+          <td>{{ transaction.category }}</td>
+          <td>{{ transaction.amountSpent }}</td>
+          <td>
+            <span class="actions">
+              <p-button label="Edit" (click)="onEditTransaction(transaction)"/>
+              <p-button label="Delete" severity="danger" (click)="onDeleteTransaction(transaction)"/>
+            </span>
+          </td>
+        </tr>
+      }
+    </tbody>
 
-</table>
+  </table>
+</div>
+
 
 <p-dialog header="Edit transaction" class="transactions" [modal]="true" [(visible)]="showDialog" position="top">
-  <app-add-transaction [editMode]="true"
+  <app-add-transaction
         [transaction]="transaction"
         (transactionSubmitted)="onUpdateTransaction($event)"
         (dialogClosed)="onCloseDialog()"

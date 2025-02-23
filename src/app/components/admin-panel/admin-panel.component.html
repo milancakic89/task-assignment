@@ -1,30 +1,46 @@
 
-<table>
-  <thead>
-    <tr>
-      <th>Name and surname</th>
-      <th>Email</th>
-      <th>View & Delete button</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for(user of users; track user){
+<div class="table">
+  <table>
+    <thead>
       <tr>
-        <td>{{ user.nameAndSurname }}</td>
-        <td>{{ user.email }}</td>
-        <td>
-          <span class="actions">
-            <p-button label="Edit" (click)="onViewUserTransactions(user)"/>
-            <p-button label="Delete" severity="danger" (click)="onDeleteUser(user)"/>
-          </span>
-        </td>
+        <th>Name and surname</th>
+        <th>Email</th>
+        <th>View & Delete button</th>
       </tr>
-    }
-  </tbody>
+    </thead>
+    <tbody>
+      @for(user of users$ | async; track user){
+        <tr>
+          <td>{{ user.nameAndSurname }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="actions">
+              <i class="pi pi-trash"  (click)="onViewUserTransactions(user)"></i>
+              <p-button label="View" (click)="onViewUserTransactions(user)"/>
+              <p-button label="Delete" severity="danger" (click)="onDeleteUser(user)"/>
+            </span>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  @if((users$ | async)?.length === 0){
+    <h3>No users found</h3>
+  }
+</div>
 
 
-</table>
+<p-dialog [header]="viewUser ? viewUser.nameAndSurname + ' transactions' : 'Transactions'"
+          class="transactions"
+          maximize="true"
+          [maximizable]="true"
+          [contentStyle]="{ width: '100%', height: '100vh'}"
+          [modal]="true"
+          [(visible)]="showDialog"
+          position="center">
+          @if(viewUser && viewUser.id){
+            <app-transactions (destroyed)="onCloseDialog()" [id]="viewUser.id"></app-transactions>
+          }
 
-<p-dialog header="Edit user" class="transactions" [modal]="true" [(visible)]="showDialog" position="top">
-  <app-transactions></app-transactions>
+
 </p-dialog>

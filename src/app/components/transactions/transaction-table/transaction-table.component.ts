@@ -4,13 +4,15 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Transaction } from '../../../shared/interfaces/transctions';
 import { DialogModule } from 'primeng/dialog';
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-transaction-table',
   standalone: true,
   imports: [CommonModule, ButtonModule, ButtonModule, DialogModule, AddTransactionComponent],
   templateUrl: './transaction-table.component.html',
-  styleUrl: './transaction-table.component.scss'
+  styleUrl: './transaction-table.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TransactionTableComponent {
   @Input() transactions: Transaction[] = [];

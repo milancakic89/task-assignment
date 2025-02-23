@@ -4,10 +4,10 @@ import { tap } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth/model/auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { API_URL } from '../../app.config';
 import { Transaction } from '../../shared/interfaces/transctions';
+import { AuthApiService } from '../auth/auth-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsApiService {
@@ -15,7 +15,7 @@ export class TransactionsApiService {
 
   http = inject(HttpClient);
   messageService = inject(MessageService);
-  authService = inject(AuthService);
+  authService = inject(AuthApiService);
 
   userSignal = toSignal(this.authService.user$);
 
@@ -67,7 +67,6 @@ export class TransactionsApiService {
 
     deleteTransactionsById(id: string): Observable<Transaction | null>{
       return this.http.delete<Transaction>(`${this.baseUrl}/transactions/${id}`).pipe(
-        tap(console.log),
         catchError((err) => {
           this.messageService.add({
             severity: 'error',

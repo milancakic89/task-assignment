@@ -1,23 +1,27 @@
-<header>
-  <p class="logo">Logo</p>
-  <nav>
-    <ul>
-      <li>
-        <a routerLink="home" routerLinkActive="active">My account</a>
-      </li>
-      <li>
-        <a routerLink="transactions" routerLinkActive="active">Transactions</a>
-      </li>
-      @if(isAdmin()){
+@if(isLoggedIn()){
+  <header>
+    <p class="logo">Logo</p>
+    <nav>
+      <ul>
+        @if(!isAdmin()){
+          <li>
+            <a routerLink="home" routerLinkActive="active">My account</a>
+          </li>
+          <li>
+            <a routerLink="transactions" routerLinkActive="active">Transactions</a>
+          </li>
+        }
+        @if(isAdmin()){
+          <li>
+            <a routerLink="admin-panel" routerLinkActive="active">Admin panel</a>
+          </li>
+        }
         <li>
-          <a routerLink="admin-panel" routerLinkActive="active">Admin panel</a>
+          <p-button label="Sign out" severity="danger" (click)="signout()"/>
         </li>
-      }
+      </ul>
+    </nav>
+  </header>
 
-      <li>
-        <p-button label="Sign out" severity="danger" (click)="signout()"/>
-      </li>
-    </ul>
-  </nav>
-</header>
+}
 

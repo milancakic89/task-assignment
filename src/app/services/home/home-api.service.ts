@@ -1,13 +1,13 @@
 import { MessageService } from 'primeng/api';
 import { catchError } from 'rxjs/operators';
-import { map, filter, tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of } from 'rxjs';
-import { AuthService } from '../auth/model/auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { User } from '../auth/model/types';
 import { API_URL } from '../../app.config';
+import { AuthApiService } from '../auth/auth-api.service';
+import { User } from '../../shared/interfaces/user.types';
 
 @Injectable({providedIn: 'root'})
 export class HomeApiService {
@@ -15,7 +15,7 @@ export class HomeApiService {
 
     http = inject(HttpClient);
     messageService = inject(MessageService);
-    authService = inject(AuthService);
+    authService = inject(AuthApiService);
 
     user = toSignal(this.authService.user$.pipe(filter(Boolean)));
 

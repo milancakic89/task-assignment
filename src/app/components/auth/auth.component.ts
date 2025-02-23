@@ -1,3 +1,4 @@
+import { catchError } from 'rxjs/operators';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,14 +16,13 @@ import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { userExistValidator } from '../../shared/validators/user-exists.validator';
-import { LoginInfo, User } from '../../services/auth/model/types';
-import { AuthService } from '../../services/auth/model/auth.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { passwordValidator } from '../../shared/validators/password.validator';
 import { Popover } from 'primeng/popover';
 import { CommonModule } from '@angular/common';
-import { map, tap } from "rxjs/operators";
+import { AuthApiService } from '../../services/auth/auth-api.service';
+import { LoginInfo, User } from '../../shared/interfaces/user.types';
 
 @Component({
   selector: 'app-auth',
@@ -46,7 +46,7 @@ export class AuthComponent {
   submitting = signal(false);
 
   fb = inject(FormBuilder);
-  authService = inject(AuthService);
+  authService = inject(AuthApiService);
   messageService = inject(MessageService);
   router = inject(Router);
 
@@ -72,12 +72,18 @@ export class AuthComponent {
   onSignIn() {
     this.submitting.set(true);
     const { email, password } = this.signinForm.value as LoginInfo;
-    this.authService.signIn(email, password).subscribe((user) => {
+    this.authService.signIn(email, password).pipe(
+      catchError(err => {
+        this.submitting.set(false);
+        throw err;
+      })
+    ).subscribe((user) => {
       this.submitting.set(false);
-      if (user) {
-        this.router.navigateByUrl('home');
-      } else {
-        this.messageService.add({severity: 'error', summary: 'Login failed', detail: `User not found`, life: 2000});
+      if(user){
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: `Welcome ${user?.nameAndSurname}`, life: 2000});
+        this.redirectUser();
+      }else{
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: `User not found`, life: 3000});
       }
     });
   }
@@ -85,12 +91,20 @@ export class AuthComponent {
   onSignUp(): void {
     this.submitting.set(true);
     const user = this.signupForm.value as User;
-    this.authService.signUp(user).subscribe((user) => {
-      if (user) {
-        this.showSignUpModal = false;
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: `You can now sign in`, life: 2000});
-      }
+    this.authService.signUp(user).subscribe(_ => {
+      this.showSignUpModal = false;
       this.submitting.set(false);
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: `You can now sign in`, life: 2000});
     });
+  }
+
+  redirectUser() {
+    this.authService.isAdmin$.subscribe(isAdmin => {
+      if (!isAdmin) {
+        this.router.navigateByUrl('home');
+      } else {
+        this.router.navigateByUrl('admin-panel');
+      }
+    })
   }
 }

@@ -19,10 +19,14 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
   background-color: #eee;
 }
 
+body{
+  display: flex;
+  flex-direction: column;
+}
 header {
   display: flex;
   justify-content: space-between;
@@ -76,6 +80,10 @@ header {
 .form {
   min-width: 20rem;
   max-width: 30rem;
+
+  .signin__form{
+    transform: translateY(-50%);
+  }
 
   .field {
     position: relative;
@@ -135,19 +143,7 @@ p-dialog {
   }
 }
 
-app-auth {
-  height: 100vh;
-  display: flex;
-  place-content: center;
-  flex-wrap: wrap;
-}
-
-app-home,
-app-transactions {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-}
+.table{
 
 table {
   width: 95%;
@@ -187,4 +183,31 @@ table {
       text-align: right;
     }
   }
+}
+
+}
+app-root{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+app-auth {
+  flex-grow: 1;
+  display: flex;
+  place-content: center;
+  flex-wrap: wrap;
+}
+
+app-home,
+app-transactions {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  min-width: 95vw;
+
+  p-button{
+    align-self: flex-start;
+  }
+
 }

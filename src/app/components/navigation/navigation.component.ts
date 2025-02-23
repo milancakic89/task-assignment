@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { inject } from '@angular/core';
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth/model/auth.service';
+import { AuthApiService } from '../../services/auth/auth-api.service';
 
 @Component({
   selector: 'app-navigation',
@@ -13,9 +13,11 @@ import { AuthService } from '../../services/auth/model/auth.service';
   styleUrl: './navigation.component.scss'
 })
 export class NavigationComponent {
-  authService = inject(AuthService)
+  authService = inject(AuthApiService)
 
   isAdmin = toSignal(this.authService.isAdmin$);
+
+  isLoggedIn = toSignal(this.authService.isLoggedIn$);
 
   signout(): void {
     this.authService.logout();

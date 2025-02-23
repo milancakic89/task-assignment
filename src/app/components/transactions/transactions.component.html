@@ -1,4 +1,7 @@
-<p-button label="Add transaction" (click)="showDialog = true" />
+@if(!id){
+  <p-button label="Add transaction" (click)="showDialog = true" />
+}
+
 <p-dialog
   header="Add transaction"
   class="transactions"
@@ -7,6 +10,7 @@
   position="top"
 >
   <app-add-transaction
+    (dialogClosed)="showDialog = false"
     (transactionSubmitted)="onAddTransaction($event)"
   ></app-add-transaction>
 </p-dialog>

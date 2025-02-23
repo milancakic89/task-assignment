@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { inject } from '@angular/core';
-import { AuthService } from '../../services/auth/model/auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -9,16 +8,18 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { map } from "rxjs/operators";
 import { HomeApiService } from '../../services/home/home-api.service';
 import { MessageService } from 'primeng/api';
+import { AuthApiService } from '../../services/auth/auth-api.service';
 
 @Component({
     selector: 'app-home',
     standalone: true,
     imports: [ButtonModule, DialogModule, InputNumberModule, ReactiveFormsModule],
     templateUrl: './home.component.html',
-    styleUrl: './home.component.scss'
+    styleUrl: './home.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
-  authService = inject(AuthService);
+  authService = inject(AuthApiService);
   fb = inject(FormBuilder);
   homeApiService = inject(HomeApiService);
   messageService = inject(MessageService);

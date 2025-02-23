@@ -3,8 +3,8 @@ import { inject } from "@angular/core";
 import { AbstractControl, ValidationErrors } from "@angular/forms";
 import { of, Observable } from "rxjs";
 import { map, catchError } from "rxjs/operators"
-import { User } from "../../services/auth/model/types";
 import { API_URL } from "../../app.config";
+import { User } from "../interfaces/user.types";
 
 export const userExistValidator = () => {
     const http = inject(HttpClient);

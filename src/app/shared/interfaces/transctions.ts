@@ -3,6 +3,6 @@ export interface Transaction {
   userId: string;
   purchasedItem: string;
   category: string;
-  timeAndDate: string;
+  timeAndDate: Date;
   amountSpent: number;
 }
