@@ -1,9 +1,9 @@
 import { MessageService } from 'primeng/api';
 import { TransactionsApiService } from './../../services/transactions/transactions.service';
-import { Component, Input, OnDestroy, OnInit, inject, EventEmitter, Output, ChangeDetectionStrategy, signal, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { Transaction } from '../../shared/interfaces/transctions';
+import { Transaction, TransactionChange } from '../../shared/interfaces/transctions';
 import { combineLatest, BehaviorSubject } from "rxjs";
 import { map, switchMap, filter, tap, take } from "rxjs/operators";
 import { TransactionTableComponent } from "../shared/transaction-table/transaction-table.component";
@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 import { AddTransactionComponent } from "../shared/add-transaction/add-transaction.component";
 import { AuthApiService } from '../../services/auth/auth-api.service';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { User } from '../../shared/interfaces/user.types';
+import { HomeApiService } from '../../services/home/home-api.service';
 
 @Component({
     selector: 'app-transactions',
@@ -21,15 +23,17 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
+  authService = inject(AuthApiService);
+  transactionApiService = inject(TransactionsApiService);
+  messageService = inject(MessageService);
+  homeService = inject(HomeApiService);
+
   private _newTransaction$ = new BehaviorSubject<Transaction>(null as  unknown as Transaction);
   private _allTransactions$ = new BehaviorSubject<Transaction[]>([]);
 
   @Input() id = '';
   @Output() destroyed = new EventEmitter<void>();
 
-  authService = inject(AuthApiService);
-  transactionApiService = inject(TransactionsApiService);
-  messageService = inject(MessageService)
 
   showDialog = false;
   lockTransactions = false;
@@ -66,11 +70,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   }
 
-  onAddTransaction(transaction: Transaction): void {
-    this.transactionApiService.addTransaction(transaction).subscribe(
+  onAddTransaction(transactionChange: TransactionChange): void {
+    this.transactionApiService.addTransaction(transactionChange.transaction).subscribe(
       transaction => {
         this.showDialog = false;
         if(transaction){
+          this.updateAccountAmount(transactionChange);
           this._newTransaction$.next(transaction)
           this.messageService.add({ severity: 'success', summary: 'Success', detail: `Transaction saved`, life: 2000});
         }
@@ -78,12 +83,13 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     )
   }
 
-  updateTransaction(transaction: Transaction){
-    this.transactionApiService.updateTransaction(transaction).subscribe(
+  updateTransaction(transactionChange: TransactionChange){
+    this.transactionApiService.updateTransaction(transactionChange.transaction).subscribe(
       transaction => {
         this.showDialog = false;
         if(transaction){
-          this._newTransaction$.next(transaction)
+          this._newTransaction$.next(transaction);
+          this.updateAccountAmount(transactionChange);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: `Transaction updated`, life: 2000});
         }
       }
@@ -106,9 +112,34 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       .subscribe(
         () => {
           this.selectedTransaction = null;
+          const transactionChange: TransactionChange = {
+            transaction: {
+              ...transaction,
+              amountSpent: 0
+            },
+            previousAmount: transaction.amountSpent
+          }
+          this.updateAccountAmount(transactionChange);
+
           this.messageService.add({ severity: 'success', summary: 'Success', detail: `Transaction deleted`, life: 2000});
         }
     )
+  }
+
+  updateAccountAmount(transactionChange: TransactionChange):void {
+    this.authService.isAdmin$.pipe(
+      take(1),
+      filter(admin => !admin && this.lockTransactions === false),
+      switchMap(_ => {
+        return this.authService.user$.pipe(
+            take(1),
+            switchMap(user => {
+              const newBalance = user.accountAmount + transactionChange.previousAmount - transactionChange.transaction.amountSpent;
+              return this.homeService.changeAmount(newBalance)
+            })
+            )
+      })
+    ).subscribe()
   }
 
   markForDelete(transaction: Transaction) {

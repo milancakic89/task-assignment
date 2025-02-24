@@ -1,6 +1,11 @@
 .password__validation{
   display: flex;
   flex-direction: column;
+  position: relative;
+  .error{
+    position: absolute;
+    top: -60px;
+  }
 
   small{
     color: red;

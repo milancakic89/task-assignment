@@ -6,3 +6,8 @@ export interface Transaction {
   timeAndDate: Date;
   amountSpent: number;
 }
+
+export interface TransactionChange {
+  transaction: Transaction;
+  previousAmount: number;
+}

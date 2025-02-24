@@ -32,7 +32,9 @@ export class HomeApiService {
           throw err;
         }),
          filter(Boolean),
-         tap(updatedUser => this.authService.updateUser(updatedUser))
+         tap(updatedUser => {
+          this.authService.updateUser(updatedUser)
+         })
       );
   }
 }

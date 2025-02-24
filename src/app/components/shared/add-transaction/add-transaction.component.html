@@ -13,11 +13,18 @@
   </div>
   <div class="field">
     <label for="amountSpent">Amount spent</label>
-    <p-inputnumber id="amountSpent" type="text" name="amountSpent" formControlName="amountSpent" placeholder="Amount spent" p class="w-full p-2"/>
-    @if (form.controls.amountSpent.invalid && form.controls.amountSpent.dirty){
-      @if(form.controls.amountSpent.errors?.['amount']) {
-      <small>exceeding account balance</small>
+    <p-inputnumber id="amountSpent" type="number" name="amountSpent" formControlName="amountSpent" placeholder="Amount spent" p class="w-full p-2"/>
+    @if (form.controls.amountSpent.invalid && form.controls.amountSpent.touched){
+      @if(form.controls.amountSpent.errors?.['pattern']) {
+        <small>amount must be greater then 0</small>
       }
+      @else if(form.controls.amountSpent.errors?.['editAmount']) {
+        <small>Exceeding (transaction + balance)</small>
+        }
+      @else if(form.controls.amountSpent.errors?.['amount']) {
+      <small>Exceeding account balance</small>
+      }
+
   }
   </div>
   <div class="footer">

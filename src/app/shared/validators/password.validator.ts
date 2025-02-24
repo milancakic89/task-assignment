@@ -9,8 +9,7 @@ export const passwordValidator = (): ValidatorFn => {
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(control.value);
 
     if (minLength && hasUppercase && hasNumber && hasSpecialChar) {
-
-      return null;
+        return null;
     }
 
     return {

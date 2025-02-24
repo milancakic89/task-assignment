@@ -27,7 +27,7 @@ export class HomeComponent {
   showDialog = false;
 
   user = toSignal(this.authService.user$);
-  currentAmount = toSignal(this.authService.user$.pipe(map(user => user?.accountAmount || 0))) ;
+  currentAmount = toSignal(this.authService.user$.pipe(map(user => user.accountAmount))) ;
 
   form = this.fb.group({
     accountAmount: new FormControl(this.currentAmount(), [Validators.required])
@@ -37,7 +37,7 @@ export class HomeComponent {
     this.homeApiService.changeAmount(this.form.value.accountAmount as number).subscribe(
       _ => {
         this.showDialog = false;
-         this.messageService.add({ severity: 'success', summary: 'Success', detail: `Amount updated`, life: 2000});
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: `Amount updated`, life: 2000});
       }
     )
   }

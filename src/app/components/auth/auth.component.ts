@@ -1,9 +1,11 @@
-import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { switchMap, take, catchError, filter } from 'rxjs/operators';
+
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   inject,
-  signal,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -19,11 +21,12 @@ import { userExistValidator } from '../../shared/validators/user-exists.validato
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { passwordValidator } from '../../shared/validators/password.validator';
-import { Popover } from 'primeng/popover';
 import { CommonModule } from '@angular/common';
 import { AuthApiService } from '../../services/auth/auth-api.service';
 import { LoginInfo, User } from '../../shared/interfaces/user.types';
-import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { PasswordModule } from 'primeng/password';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'app-auth',
@@ -35,8 +38,9 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     CardModule,
     InputTextModule,
     ReactiveFormsModule,
-    Popover
-
+    PasswordModule,
+    InputNumberModule,
+    PopoverModule
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
@@ -55,7 +59,7 @@ export class AuthComponent {
       validators: [Validators.email, Validators.required],
       updateOn: 'blur',
     }),
-    password: new FormControl('', [Validators.required])
+    password: new FormControl('', [Validators.required, passwordValidator()])
   });
 
   signupForm = this.fb.group({
@@ -65,9 +69,11 @@ export class AuthComponent {
       asyncValidators: [userExistValidator()],
       updateOn: 'blur',
     }),
-    password: new FormControl('', [Validators.required, passwordValidator()]),
-    accountAmount: new FormControl(0, [Validators.required, Validators.pattern(/^[0-9]+$/)]),
+    signupPassword: new FormControl('', [Validators.required, passwordValidator()]),
+    accountAmount: new FormControl(0, [Validators.required]),
   });
+
+  constructor(private _cdr: ChangeDetectorRef){}
 
   onSignIn() {
     const { email, password } = this.signinForm.value as LoginInfo;
@@ -87,14 +93,23 @@ export class AuthComponent {
 
   onSignUp(): void {
     const user = this.signupForm.value as User;
-    this.authService.signUp(user).subscribe(_ => {
+    this.authService.signUp(user).pipe(
+      filter(Boolean),
+      switchMap(user => this.autoLoginUser(user.email, user.password))
+    ).subscribe(usr => {
       this.showSignUpModal = false;
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: `You can now sign in`, life: 2000});
+      this._cdr.detectChanges();
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: `Welcome ${usr?.nameAndSurname}`, life: 2000});
+      this.redirectUser()
     });
   }
 
+  autoLoginUser(email: string, password: string): Observable<User | null> {
+    return this.authService.signIn(email, password);
+  }
+
   redirectUser() {
-    this.authService.isAdmin$.subscribe(isAdmin => {
+    this.authService.isAdmin$.pipe(take(1)).subscribe(isAdmin => {
       if (!isAdmin) {
         this.router.navigateByUrl('home');
       } else {

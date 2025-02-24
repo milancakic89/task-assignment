@@ -4,7 +4,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { Transaction } from '../../../shared/interfaces/transctions';
+import { Transaction, TransactionChange } from '../../../shared/interfaces/transctions';
 import { amountValidator } from '../../../shared/validators/amount.validator';
 
 @Component({
@@ -20,17 +20,17 @@ export class AddTransactionComponent {
 
   private _transaction: Transaction | null = null;
 
-  @Output() transactionSubmitted = new EventEmitter<Transaction>();
-  @Output() dialogClosed = new EventEmitter<Transaction>();
+  @Output() transactionSubmitted = new EventEmitter<TransactionChange>();
+  @Output() dialogClosed = new EventEmitter();
 
   @Input()
   set transaction(value: Transaction){
     if(value){
-      this._transaction = value;
       this.form.patchValue({
         ...value,
         timeAndDate: new Date(value.timeAndDate)
       });
+      this._transaction = value;
     }
   }
 
@@ -40,7 +40,7 @@ export class AddTransactionComponent {
     purchasedItem: new FormControl('', [Validators.required]),
     category: new FormControl('', [Validators.required]),
     timeAndDate: new FormControl(new Date(), [Validators.required]),
-    amountSpent: new FormControl(0, [Validators.required, amountValidator()]),
+    amountSpent: new FormControl(1, [Validators.required, Validators.min(1), Validators.pattern(/^\d+(\.\d+)?$/), amountValidator()]),
   });
 
   onSubmit(): void {
@@ -49,12 +49,16 @@ export class AddTransactionComponent {
       ...this._transaction,
       ...this.form.value
     }
-    this.transactionSubmitted.emit(transaction as Transaction);
-    this.form.reset();
+    const previousTransactionAmount = this._transaction?.amountSpent || 0;
+    this.transactionSubmitted.emit({
+      transaction,
+      previousAmount: previousTransactionAmount
+    } as TransactionChange);
   }
 
   onCloseDialog(): void {
     this.showDialog = false;
+    this.form.reset();
     this.dialogClosed.emit();
   }
 }

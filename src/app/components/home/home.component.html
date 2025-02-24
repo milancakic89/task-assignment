@@ -1,4 +1,4 @@
-<h3>Welcome {{ user()?.nameAndSurname }} your current balance is {{ user()?.accountAmount }}</h3>
+<h3>Welcome {{ user()?.nameAndSurname }} your current balance is {{ currentAmount() }}</h3>
 
 <p-button label="Change amount" (click)="showDialog = true" />
 

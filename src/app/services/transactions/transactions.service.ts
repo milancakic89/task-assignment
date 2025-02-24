@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { catchError } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
@@ -10,13 +11,18 @@ import { AuthApiService } from '../auth/auth-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsApiService {
-  baseUrl = inject(API_URL);
-
   http = inject(HttpClient);
   messageService = inject(MessageService);
   authService = inject(AuthApiService);
+  baseUrl = inject(API_URL);
+
+  private _transactionEditValue$ = new BehaviorSubject<number>(0);
+
+  transacionEditValue$ = this._transactionEditValue$.asObservable();
 
   userSignal = toSignal(this.authService.user$);
+
+
 
   addTransaction(transaction: Transaction): Observable<Transaction | null> {
     const newTransaction: Transaction = {
@@ -76,5 +82,9 @@ export class TransactionsApiService {
           throw err;
         }),
        )
+   }
+
+   setEditTransactionValue(value: number): void {
+    this._transactionEditValue$.next(value)
    }
 }

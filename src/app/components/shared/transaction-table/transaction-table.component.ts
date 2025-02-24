@@ -1,10 +1,11 @@
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Transaction } from '../../../shared/interfaces/transctions';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Transaction, TransactionChange } from '../../../shared/interfaces/transctions';
 import { DialogModule } from 'primeng/dialog';
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { TransactionsApiService } from '../../../services/transactions/transactions.service';
 
 @Component({
   selector: 'app-transaction-table',
@@ -15,20 +16,23 @@ import { ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TransactionTableComponent {
+  transactionService = inject(TransactionsApiService);
+
   @Input() transactions: Transaction[] = [];
-  @Output() updateTransaction = new EventEmitter<Transaction>();
+  @Output() updateTransaction = new EventEmitter<TransactionChange>();
   @Output() deleteTransaction = new EventEmitter<Transaction>();
   @Output() dialogClosed = new EventEmitter();
 
   showDialog = false;
   transaction: Transaction = null as unknown as Transaction;
 
-  onUpdateTransaction(transaction: Transaction): void {
+  onUpdateTransaction(transactionChange: TransactionChange): void {
     this.showDialog = false;
-    this.updateTransaction.emit(transaction)
+    this.updateTransaction.emit(transactionChange)
   }
 
   onEditTransaction(transaction: Transaction): void {
+    this.transactionService.setEditTransactionValue(transaction.amountSpent)
     this.transaction = transaction;
     this.showDialog = true;
   }
@@ -38,7 +42,9 @@ export class TransactionTableComponent {
   }
 
   onCloseDialog(): void {
+    this.transactionService.setEditTransactionValue(0)
     this.showDialog = false;
-    this.dialogClosed.emit()
+    this.dialogClosed.emit();
+
   }
 }

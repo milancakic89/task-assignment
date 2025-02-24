@@ -1,12 +1,14 @@
+
 import { MessageService } from 'primeng/api';
 import { catchError } from 'rxjs/operators';
-import { map, tap, take } from 'rxjs/operators';
+import { map, tap, shareReplay, distinctUntilChanged } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { API_URL } from '../../app.config';
 import { User } from '../../shared/interfaces/user.types';
+import { HomeApiService } from '../home/home-api.service';
 
 export const ANONYMOUS_USER: User = {
   id: '',
@@ -24,16 +26,13 @@ export class AuthApiService {
 
   messageService = inject(MessageService);
   http = inject(HttpClient);
-  router = inject(Router)
+  router = inject(Router);
 
   user$ = this._user$.asObservable();
 
-  isAdmin$ = this.user$.pipe(
-    map(user => user.email === "admin@kireygroup.com" && user.password === "Admin@kireygroup2025")
-  )
+  isAdmin$ = this.user$.pipe(map(user => user.email === "admin@kireygroup.com" && user.password === "Admin@kireygroup2025"))
 
   isLoggedIn$ = this.user$.pipe(map(user => user.id !== ANONYMOUS_USER.id))
-
 
   signIn(email: string, password: string): Observable<User | null> {
     const encodedPassword = encodeURIComponent(password);
@@ -44,7 +43,8 @@ export class AuthApiService {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: err.message,
+            detail: typeof err.message === 'string' ? 'Check json-server - ' + err.message :
+            'Error. Please check if json-server is running',
             life: 3000,
           });
           throw err;
@@ -64,7 +64,8 @@ export class AuthApiService {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: err.error,
+          detail: typeof err.message === 'string' ? 'Check json-server - ' + err.message :
+                  'Error. Please check if json-server is running',
           life: 3000,
         });
         throw err;
