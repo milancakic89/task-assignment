@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Transaction } from '../../shared/interfaces/transctions';
 import { combineLatest, BehaviorSubject } from "rxjs";
-import { map, switchMap, filter, tap } from "rxjs/operators";
+import { map, switchMap, filter, tap, take } from "rxjs/operators";
 import { TransactionTableComponent } from "./transaction-table/transaction-table.component";
 import { CommonModule } from '@angular/common';
 import { AddTransactionComponent } from "./add-transaction/add-transaction.component";
@@ -90,6 +90,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     .pipe(
       switchMap(_ => {
         return this.authService.user$.pipe(
+          take(1),
           switchMap(user => {
             return this.transactionApiService.getTransactionsForUser(user.id).pipe(
               filter(Boolean),

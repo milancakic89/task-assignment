@@ -36,8 +36,9 @@ export class AuthApiService {
 
 
   signIn(email: string, password: string): Observable<User | null> {
+    const encodedPassword = encodeURIComponent(password);
     return this.http
-      .get<User[]>(`${this.baseUrl}/users?email=${email}&password=${password}`)
+      .get<User[]>(`${this.baseUrl}/users?email=${email}&password=${encodedPassword}`)
       .pipe(
         catchError((err) => {
           this.messageService.add({

@@ -5,23 +5,8 @@
       "nameAndSurname": "kireygroup",
       "email": "admin@kireygroup.com",
       "password": "Admin@kireygroup2025"
-    },
-    {
-      "id": "4115",
-      "nameAndSurname": "Test Milance",
-      "email": "test@test.com",
-      "password": "#Testerica12",
-      "accountAmount": 10000
     }
+
   ],
-  "transactions": [
-    {
-      "id": "793b",
-      "purchasedItem": "item 1",
-      "category": "test",
-      "timeAndDate": "2025-02-18T23:00:00.000Z",
-      "amountSpent": 12,
-      "userId": "4115"
-    }
-  ]
+  "transactions": []
 }

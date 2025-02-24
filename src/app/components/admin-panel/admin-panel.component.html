@@ -15,8 +15,9 @@
           <td>{{ user.email }}</td>
           <td>
             <span class="actions">
-              <i class="pi pi-trash"  (click)="onViewUserTransactions(user)"></i>
-              <p-button label="View" (click)="onViewUserTransactions(user)"/>
+              <button class="icon-btn" (click)="onViewUserTransactions(user)">
+                <i class="pi pi-eye" style="font-size: 1.4rem" ></i>
+              </button>
               <p-button label="Delete" severity="danger" (click)="onDeleteUser(user)"/>
             </span>
           </td>

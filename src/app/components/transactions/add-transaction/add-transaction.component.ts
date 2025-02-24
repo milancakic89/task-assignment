@@ -36,7 +36,6 @@ export class AddTransactionComponent {
 
   showDialog = false;
 
-
   form = this.fb.group({
     purchasedItem: new FormControl('', [Validators.required]),
     category: new FormControl('', [Validators.required]),
@@ -51,6 +50,7 @@ export class AddTransactionComponent {
       ...this.form.value
     }
     this.transactionSubmitted.emit(transaction as Transaction);
+    this.form.reset();
   }
 
   onCloseDialog(): void {

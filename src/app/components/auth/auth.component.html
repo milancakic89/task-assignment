@@ -25,7 +25,7 @@
             }
         </div>
         <div class="footer flex flex-column w-full text-center">
-            <p-button class="mb-2 w-full" label="Sign in" type="submit" [disabled]="signinForm.invalid || submitting()" />
+            <p-button class="mb-2 w-full" label="Sign in" type="submit" [disabled]="signinForm.invalid" />
             <p-button class="mb-2 w-full" label="Sign up" type="button" severity="secondary" (click)="showSignUpModal = true" />
         </div>
     </form>
@@ -74,7 +74,7 @@
         }
     </div>
         <div class="footer flex flex-column w-full text-center">
-            <p-button class="mb-2 w-full" label="Sign up" type="submit" [disabled]="signupForm.invalid || submitting()" />
+            <p-button class="mb-2 w-full" label="Sign up" type="submit" [disabled]="signupForm.invalid" />
             <p-button class="mb-2 w-full" label="Cancel" type="button" severity="secondary"
                 (click)="showSignUpModal = false" />
         </div>

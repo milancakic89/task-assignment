@@ -43,7 +43,6 @@ import { LoginInfo, User } from '../../shared/interfaces/user.types';
 })
 export class AuthComponent {
   showSignUpModal = false;
-  submitting = signal(false);
 
   fb = inject(FormBuilder);
   authService = inject(AuthApiService);
@@ -51,11 +50,11 @@ export class AuthComponent {
   router = inject(Router);
 
   signinForm = this.fb.group({
-    email: new FormControl('test@test.com', {
+    email: new FormControl('', {
       validators: [Validators.email, Validators.required],
       updateOn: 'blur',
     }),
-    password: new FormControl('test12345', [Validators.required])
+    password: new FormControl('', [Validators.required])
   });
 
   signupForm = this.fb.group({
@@ -70,15 +69,12 @@ export class AuthComponent {
   });
 
   onSignIn() {
-    this.submitting.set(true);
     const { email, password } = this.signinForm.value as LoginInfo;
     this.authService.signIn(email, password).pipe(
       catchError(err => {
-        this.submitting.set(false);
         throw err;
       })
     ).subscribe((user) => {
-      this.submitting.set(false);
       if(user){
         this.messageService.add({ severity: 'success', summary: 'Success', detail: `Welcome ${user?.nameAndSurname}`, life: 2000});
         this.redirectUser();
@@ -89,11 +85,9 @@ export class AuthComponent {
   }
 
   onSignUp(): void {
-    this.submitting.set(true);
     const user = this.signupForm.value as User;
     this.authService.signUp(user).subscribe(_ => {
       this.showSignUpModal = false;
-      this.submitting.set(false);
       this.messageService.add({ severity: 'success', summary: 'Success', detail: `You can now sign in`, life: 2000});
     });
   }

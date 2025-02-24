@@ -1,6 +1,5 @@
 import { MessageService } from 'primeng/api';
 import { catchError } from 'rxjs/operators';
-import { tap } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
