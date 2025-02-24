@@ -2,17 +2,17 @@
 
 # Versions
 
-Angular version 19.1.8
+Angular version 19.1.8<br>
 Node version 22.14.0
 
-# Installation
+## Installation
 
 Install dependencies
 ```bash
 npm install
 ```
 
-# Commands
+### Commands
 
 Run json server
 
@@ -20,9 +20,17 @@ Run json server
 npm run json-server
 ```
 Leave the json server running
+<br>
+<br>
+# Endpoints
+<br>
 
-/users - Admin user included
-/transactions - Empty
+## /users - Admin user included (check db.json)<br>
+## /transactions - Empty
+
+<br>
+<br>
+<br>
 
 To serve application, in separate terminal run
 
@@ -30,7 +38,7 @@ To serve application, in separate terminal run
 ng serve
 ```
 
-## Code scaffolding
+### Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
