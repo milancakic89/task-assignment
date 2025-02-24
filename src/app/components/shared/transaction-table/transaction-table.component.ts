@@ -38,12 +38,14 @@ export class TransactionTableComponent {
   }
 
   onDeleteTransaction(transaction: Transaction): void {
+    this.transaction = null as unknown as Transaction;
     this.deleteTransaction.emit(transaction)
   }
 
   onCloseDialog(): void {
-    this.transactionService.setEditTransactionValue(0)
+    this.transactionService.setEditTransactionValue(0);
     this.showDialog = false;
+    this.transaction = null as unknown as Transaction;
     this.dialogClosed.emit();
 
   }

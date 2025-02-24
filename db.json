@@ -5,8 +5,14 @@
       "nameAndSurname": "kireygroup",
       "email": "admin@kireygroup.com",
       "password": "Admin@kireygroup2025"
+    },
+    {
+      "id": "2eca",
+      "nameAndSurname": "milan cakic",
+      "email": "milan@cakic.com",
+      "signupPassword": "#Masterdamus12",
+      "accountAmount": 240
     }
-
   ],
   "transactions": []
 }

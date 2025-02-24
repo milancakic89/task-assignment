@@ -30,7 +30,10 @@ export class AddTransactionComponent {
         ...value,
         timeAndDate: new Date(value.timeAndDate)
       });
+      console.log('patching')
       this._transaction = value;
+    }else{
+      console.log('clear value')
     }
   }
 
@@ -54,11 +57,11 @@ export class AddTransactionComponent {
       transaction,
       previousAmount: previousTransactionAmount
     } as TransactionChange);
+    this.form.reset();
   }
 
   onCloseDialog(): void {
     this.showDialog = false;
-    this.form.reset();
     this.dialogClosed.emit();
   }
 }

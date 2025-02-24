@@ -128,7 +128,7 @@ header {
 p-dialog {
   &.transactions {
     .transactions__form {
-      height: 32rem;
+      min-height: 30rem;
       display: flex;
       flex-direction: column;
 
@@ -217,4 +217,7 @@ app-transactions {
     align-self: flex-start;
     text-align: center;
   }
+}
+.p-datepicker .p-datepicker-panel {
+  transform: translateY(-20%);
 }
