@@ -47,12 +47,12 @@ import { PopoverModule } from 'primeng/popover';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthComponent {
-  showSignUpModal = false;
-
   fb = inject(FormBuilder);
   authService = inject(AuthApiService);
   messageService = inject(MessageService);
   router = inject(Router);
+
+  showSignUpModal = false;
 
   signinForm = this.fb.group({
     email: new FormControl('', {

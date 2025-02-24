@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { combineLatest, BehaviorSubject } from "rxjs";
 import { map, filter } from "rxjs/operators";
 import { DialogModule } from 'primeng/dialog';
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TransactionsComponent } from '../transactions/transactions.component';
 import { AdminService } from '../../services/admin-panel/admin-api.service';
@@ -31,8 +31,10 @@ export class AdminPanelComponent implements OnInit{
   showConfirmDialog = false;
   lockUsers = false;
   adminUser = null as unknown as User;
-  viewUser: User | null = null;
+  viewUser = signal(null as unknown as User);
   selectedUserForDelete: User | null = null;
+
+
 
   users$ = combineLatest([this._allUsers$, this._deleteId$]).pipe(
     filter(_ => this.lockUsers !== true),
@@ -54,14 +56,15 @@ export class AdminPanelComponent implements OnInit{
 
   onViewUserTransactions(user: User) {
     this.adminService.setEditMode(true);
-    this.viewUser = user;
+    this.viewUser.set(null as unknown as User)
+    this.viewUser.set(user);
     this.showDialog = true;
   }
 
   onCloseDialog(): void {
     this.adminService.setEditMode(false);
     this.showDialog = false;
-    this.viewUser = null;
+    this.viewUser.set(null as unknown as User);
   }
 
   onDeleteUser(user: User) {

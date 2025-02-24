@@ -22,7 +22,7 @@ import { HomeApiService } from '../../services/home/home-api.service';
     styleUrl: './transactions.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TransactionsComponent implements OnInit, OnDestroy {
+export class TransactionsComponent implements OnInit {
   authService = inject(AuthApiService);
   transactionApiService = inject(TransactionsApiService);
   messageService = inject(MessageService);
@@ -32,7 +32,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   private _allTransactions$ = new BehaviorSubject<Transaction[]>([]);
 
   @Input() id = '';
-  @Output() destroyed = new EventEmitter<void>();
 
 
   showDialog = false;
@@ -103,7 +102,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         return this.authService.user$.pipe(
           take(1),
           switchMap(user => {
-            return this.transactionApiService.getTransactionsForUser(user.id).pipe(
+            const id = this.id || user.id;
+            return this.transactionApiService.getTransactionsForUser(id).pipe(
               filter(Boolean),
               tap(transactions => this._allTransactions$.next(transactions))
             )
@@ -120,7 +120,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
             previousAmount: transaction.amountSpent
           }
           this.updateAccountAmount(transactionChange);
-
           this.messageService.add({ severity: 'success', summary: 'Success', detail: `Transaction deleted`, life: 2000});
         }
     )
@@ -135,7 +134,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
             take(1),
             switchMap(user => {
               const newBalance = user.accountAmount + transactionChange.previousAmount - transactionChange.transaction.amountSpent;
-              return this.homeService.changeAmount(newBalance)
+              return this.homeService.changeAmount(newBalance);
             })
             )
       })
@@ -178,9 +177,4 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.lockTransactions = false;
     return transactions;
   }
-
-  ngOnDestroy(): void {
-    this.destroyed.emit();
-  }
-
 }

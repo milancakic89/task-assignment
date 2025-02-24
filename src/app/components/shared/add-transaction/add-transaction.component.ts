@@ -30,10 +30,7 @@ export class AddTransactionComponent {
         ...value,
         timeAndDate: new Date(value.timeAndDate)
       });
-      console.log('patching')
       this._transaction = value;
-    }else{
-      console.log('clear value')
     }
   }
 

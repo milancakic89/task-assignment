@@ -15,13 +15,15 @@
   ></app-add-transaction>
 </p-dialog>
 
-@if(transactions$ | async; as transactions ){ @if(transactions.length){
-<app-transaction-table
-  [transactions]="transactions"
-  (deleteTransaction)="markForDelete($event)"
-  (updateTransaction)="updateTransaction($event)"
-></app-transaction-table>
-} }
+@if(transactions$ | async; as transactions ){
+   @if(transactions.length){
+    <app-transaction-table
+      [transactions]="transactions"
+      (deleteTransaction)="markForDelete($event)"
+      (updateTransaction)="updateTransaction($event)"
+    ></app-transaction-table>
+}
+}
 
 <p-dialog header="Delete transaction" [modal]="true" [(visible)]="showConfirm" position="top">
   <app-confirm-dialog header="Delete" (confirm)="onDialogConfirm()" (cancel)="onDialogCancel()">
