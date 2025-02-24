@@ -18,7 +18,15 @@
 @if(transactions$ | async; as transactions ){ @if(transactions.length){
 <app-transaction-table
   [transactions]="transactions"
-  (deleteTransaction)="deleteTransaction($event)"
+  (deleteTransaction)="markForDelete($event)"
   (updateTransaction)="updateTransaction($event)"
 ></app-transaction-table>
 } }
+
+<p-dialog header="Delete transaction" [modal]="true" [(visible)]="showConfirm" position="top">
+  <app-confirm-dialog header="Delete" (confirm)="onDialogConfirm()" (cancel)="onDialogCancel()">
+    <p>Are you sure you want to delete this transaction?</p>
+  </app-confirm-dialog>
+</p-dialog>
+
+

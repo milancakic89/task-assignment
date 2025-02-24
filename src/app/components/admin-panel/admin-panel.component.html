@@ -18,7 +18,7 @@
               <button class="icon-btn" (click)="onViewUserTransactions(user)">
                 <i class="pi pi-eye" style="font-size: 1.4rem" ></i>
               </button>
-              <p-button label="Delete" severity="danger" (click)="onDeleteUser(user)"/>
+              <p-button label="Delete" severity="danger" (click)="onMarkForDelete(user)"/>
             </span>
           </td>
         </tr>
@@ -42,6 +42,11 @@
           @if(viewUser && viewUser.id){
             <app-transactions (destroyed)="onCloseDialog()" [id]="viewUser.id"></app-transactions>
           }
+</p-dialog>
 
 
+<p-dialog header="Delete user" [modal]="true" [(visible)]="showConfirmDialog" position="top">
+  <app-confirm-dialog header="Delete" (confirm)="onDeleteConfirm()" (cancel)="onDeleteCancel()">
+    <p>Are you sure you want to delete this user?</p>
+  </app-confirm-dialog>
 </p-dialog>

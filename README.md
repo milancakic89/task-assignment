@@ -1,16 +1,34 @@
 # TaskAssignment
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.8.
+# Versions
 
-## Development server
+Angular version 19.1.8
+Node version 22.14.0
 
-To start a local development server, run:
+# Installation
+
+Install dependencies
+```bash
+npm install
+```
+
+# Commands
+
+Run json server
+
+```bash
+npm run json-server
+```
+Leave the json server running
+
+/users - Admin user included
+/transactions - Empty
+
+To serve application, in separate terminal run
 
 ```bash
 ng serve
 ```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
 ## Code scaffolding
 

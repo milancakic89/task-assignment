@@ -1,20 +1,21 @@
 import { MessageService } from 'primeng/api';
 import { TransactionsApiService } from './../../services/transactions/transactions.service';
-import { Component, Input, OnDestroy, OnInit, inject, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject, EventEmitter, Output, ChangeDetectionStrategy, signal, ChangeDetectorRef } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Transaction } from '../../shared/interfaces/transctions';
 import { combineLatest, BehaviorSubject } from "rxjs";
 import { map, switchMap, filter, tap, take } from "rxjs/operators";
-import { TransactionTableComponent } from "./transaction-table/transaction-table.component";
+import { TransactionTableComponent } from "../shared/transaction-table/transaction-table.component";
 import { CommonModule } from '@angular/common';
-import { AddTransactionComponent } from "./add-transaction/add-transaction.component";
+import { AddTransactionComponent } from "../shared/add-transaction/add-transaction.component";
 import { AuthApiService } from '../../services/auth/auth-api.service';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-transactions',
     standalone: true,
-    imports: [CommonModule, ButtonModule, DialogModule, AddTransactionComponent, TransactionTableComponent],
+    imports: [CommonModule, ButtonModule, DialogModule, AddTransactionComponent, TransactionTableComponent, ConfirmDialogComponent],
     templateUrl: './transactions.component.html',
     styleUrl: './transactions.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -32,6 +33,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   showDialog = false;
   lockTransactions = false;
+
+  showConfirm = false;
+
+  selectedTransaction: Transaction | null = null;
 
   transactions$ = combineLatest([this._allTransactions$, this._newTransaction$]).pipe(
     filter(() => this.lockTransactions !== true),
@@ -100,9 +105,25 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       }))
       .subscribe(
         () => {
+          this.selectedTransaction = null;
           this.messageService.add({ severity: 'success', summary: 'Success', detail: `Transaction deleted`, life: 2000});
         }
     )
+  }
+
+  markForDelete(transaction: Transaction) {
+    this.selectedTransaction = transaction;
+    this.showConfirm = true;
+  }
+
+  onDialogConfirm(){
+    this.showConfirm = false;
+    this.deleteTransaction(this.selectedTransaction as Transaction)
+  }
+
+  onDialogCancel(){
+    this.showConfirm = false;
+    this.selectedTransaction = null;
   }
 
   private _fetchTransactions(id: string){

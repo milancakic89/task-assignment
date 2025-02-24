@@ -9,11 +9,12 @@ import { AdminService } from '../../services/admin-panel/admin-api.service';
 import { MessageService } from 'primeng/api';
 import { AuthApiService } from '../../services/auth/auth-api.service';
 import { User } from '../../shared/interfaces/user.types';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
-  imports: [CommonModule, ButtonModule, DialogModule, TransactionsComponent],
+  imports: [CommonModule, ButtonModule, DialogModule, TransactionsComponent, ConfirmDialogComponent],
   templateUrl: './admin-panel.component.html',
   styleUrl: './admin-panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,9 +28,11 @@ export class AdminPanelComponent implements OnInit{
   private _allUsers$ = new BehaviorSubject<User[]>([]);
 
   showDialog = false;
+  showConfirmDialog = false;
   lockUsers = false;
   adminUser = null as unknown as User;
   viewUser: User | null = null;
+  selectedUserForDelete: User | null = null;
 
   users$ = combineLatest([this._allUsers$, this._deleteId$]).pipe(
     filter(_ => this.lockUsers !== true),
@@ -64,8 +67,24 @@ export class AdminPanelComponent implements OnInit{
   onDeleteUser(user: User) {
     this.adminService.deleteUserById(user.id).subscribe(res => {
       this._deleteId$.next(res.id);
+      this.selectedUserForDelete = null;
       this.messageService.add({ severity: 'success', summary: 'Success', detail: `User deleted`, life: 2000});
     })
+  }
+
+  onMarkForDelete(user: User): void {
+    this.selectedUserForDelete = user;
+    this.showConfirmDialog = true;
+  }
+
+  onDeleteConfirm(): void {
+    this.showConfirmDialog = false;
+    this.onDeleteUser(this.selectedUserForDelete as User);
+  }
+
+  onDeleteCancel(): void {
+    this.showConfirmDialog = false;
+    this.selectedUserForDelete = null;
   }
 
   private _updateInLock(users: User[]) {

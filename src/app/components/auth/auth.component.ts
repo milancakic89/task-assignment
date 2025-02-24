@@ -23,6 +23,7 @@ import { Popover } from 'primeng/popover';
 import { CommonModule } from '@angular/common';
 import { AuthApiService } from '../../services/auth/auth-api.service';
 import { LoginInfo, User } from '../../shared/interfaces/user.types';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-auth',
